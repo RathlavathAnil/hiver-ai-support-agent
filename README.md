@@ -169,7 +169,54 @@ curl -X POST http://localhost:8080/api/v1/support \
 
 ---
 
-## 4. Intent Taxonomy (10 Empirically Derived Classes)
+## 4. Live System Demonstrations
+
+The following examples are captured from the running Spring Boot service and show both successful routing behavior and an observed retrieval failure.
+
+### 4.1 Auto-Handle — Battery Performance
+
+When a customer reports an issue such as rapid battery drain, the system classifies the inquiry as `BATTERY_PERFORMANCE` with 0.90 confidence and routes it to `AUTO_HANDLE`. Semantically similar historical `@AppleSupport` conversations (with cosine similarity scores around 0.6774, 0.6516, and 0.6358) are retrieved from pgvector to provide grounding context.
+
+![Live battery auto-handle demo](docs/demo-battery-support.png)
+*Live API demonstration: BATTERY_PERFORMANCE, 0.90 confidence, AUTO_HANDLE, with semantic historical retrieval.*
+
+---
+
+### 4.2 Escalation — Physical Hardware Damage
+
+When an inquiry describes physical device damage (such as a cracked screen from dropping the phone), the system classifies it as `HARDWARE_PHYSICAL_DAMAGE` with 0.95 confidence and conservatively escalates it.
+
+![Live hardware escalation demo](docs/demo-hardware-escalation.png)
+*Live API demonstration: HARDWARE_PHYSICAL_DAMAGE, 0.95 confidence, ESCALATE, with an explicit safety-oriented escalation reason: "Physical hardware damage requires in-person store inspection, hardware diagnostic tools, or Genius Bar repair appointment."*
+
+---
+
+### 4.3 Observed Failure — Billing Retrieval
+
+The system receives a billing and refund request: *"I was charged twice for my subscription. Please help me get a refund."* It correctly classifies the intent as `BILLING_SUBSCRIPTIONS` with 0.92 confidence and triggers the deterministic high-risk keyword escalation guardrail (`"refund"`).
+
+![Billing retrieval failure](docs/demo-billing-retrieval-failure.png)
+*Failure example: the intent classifier and escalation guardrail correctly identify a billing/refund request and escalate it, but the small historical retrieval corpus returns generic/irrelevant battery-related content. This demonstrates why retrieval quality remains a key limitation.*
+
+> [!NOTE]
+> **Analysis**: Observed failure: the system correctly classifies the request as `BILLING_SUBSCRIPTIONS` and escalates it because of the refund request, but the retrieved historical context and generated reply are not relevant to the billing issue. This is a concrete example of the limitations of retrieving from a small raw historical Twitter corpus. This failure is consistent with the **Generic Historical Boilerplate Retrieval** failure mode discussed below.
+
+---
+
+### 4.4 What the Live Demos Demonstrate
+
+- **Hybrid intent classification**: Robust classification across routine troubleshooting, hardware damage, and financial edge cases.
+- **Confidence estimation**: Explicit calibrated confidence scores provided on every API response.
+- **Semantic retrieval using pgvector**: Cosine similarity matching over 768-dimensional dense embeddings.
+- **Historical resolution grounding**: Dynamic context injection from past resolutions.
+- **AUTO_HANDLE routing**: Direct, automated support for self-contained software/battery troubleshooting.
+- **Conservative ESCALATE routing**: Fail-safe guardrails that trigger on high-risk keywords and safety-sensitive categories.
+- **Explicit escalation reasons**: Structured justification returned in the API response explaining why human triage is necessary.
+- **Real-world retrieval failure detection**: Transparent identification and diagnosis of retrieval corpus limitations without fabricating outputs.
+
+---
+
+## 5. Intent Taxonomy (10 Empirically Derived Classes)
 
 Discovered from 106,648 `@AppleSupport` conversation pairs in the TWCS dataset:
 
@@ -186,7 +233,7 @@ Discovered from 106,648 `@AppleSupport` conversation pairs in the TWCS dataset:
 
 ---
 
-## 5. Measured Comparative Evaluation Benchmarks
+## 6. Measured Comparative Evaluation Benchmarks
 
 Evaluated against the **200-sample Stratified Golden Evaluation Set** (Seed: 42) with strict 0% data leakage:
 
@@ -200,7 +247,7 @@ Evaluated against the **200-sample Stratified Golden Evaluation Set** (Seed: 42)
 
 ---
 
-## 6. What is Misleading About My Headline Number?
+## 7. What is Misleading About My Headline Number?
 
 While the 84.5% intent accuracy and 0.8374 Macro F1 represent strong benchmark performance, several critical nuances must be highlighted:
 
@@ -213,13 +260,13 @@ While the 84.5% intent accuracy and 0.8374 Macro F1 represent strong benchmark p
 4. **Lexical ROUGE vs Real Support Helpfulness**:
    The ML baseline achieved a slightly higher ROUGE-L (0.2338) than the production agent (0.2208). This occurs because the ML baseline simply copies historical Twitter deflection phrases (*"Please DM us with your model"*), which match historical text lexically but provide poor customer value compared to direct diagnostic instructions.
 5. **LLM Judge is a Secondary Diagnostic, Not Ground Truth**:
-   The human-vs-LLM agreement analysis revealed weak statistical correlation (see Section 7), demonstrating that LLM judge scores cannot be treated as definitive or validated ground truth.
+   The human-vs-LLM agreement analysis revealed weak statistical correlation (see Section 8), demonstrating that LLM judge scores cannot be treated as definitive or validated ground truth.
 6. **Escalation Cost Asymmetry**:
    An escalation accuracy of 93.5% does not capture the asymmetry of failure risk: a False Positive (escalating an auto-resolvable battery tip) merely costs a few minutes of human labor, whereas a False Negative (auto-handling billing fraud or swelling battery hardware) can cause severe legal, safety, or financial liability.
 
 ---
 
-## 7. LLM-as-a-Judge & Human Agreement Framework
+## 8. LLM-as-a-Judge & Human Agreement Framework
 
 ### 4-Dimension Rubric (1–5 Integer Scale)
 1. **Relevance (1–5)**: Does the reply directly address the customer's stated issue?
@@ -254,7 +301,7 @@ python evaluation/calculate_judge_agreement.py
 
 ---
 
-## 8. Top 5 Empirical Failure Modes & Diagnoses
+## 9. Top 5 Empirical Failure Modes & Diagnoses
 
 Based on empirical error analysis from the 200 golden set predictions:
 
@@ -295,7 +342,7 @@ Based on empirical error analysis from the 200 golden set predictions:
 
 ---
 
-## 9. One-More-Week Engineering Plan
+## 10. One-More-Week Engineering Plan
 
 If given one additional week, the prioritized roadmap is:
 
@@ -309,7 +356,7 @@ If given one additional week, the prioritized roadmap is:
 
 ---
 
-## 10. Submission Verification Summary
+## 11. Submission Verification Summary
 
 - **Java Suite**: 29/29 JUnit 5 & Mockito test suite passing cleanly (`cd support-agent && mvn test`).
 - **Python Suite**: 18/18 unit tests passing cleanly (`python -m unittest discover -s evaluation/tests -p "test_*.py"`).
@@ -318,7 +365,7 @@ If given one additional week, the prioritized roadmap is:
 
 ---
 
-## 11. Key Project Artifacts
+## 12. Key Project Artifacts
 
 - [DECISION_LOG.md](DECISION_LOG.md) — 13 detailed engineering decisions, alternatives, and trade-offs.
 - [report/final_report.md](report/final_report.md) — Comprehensive technical evaluation report with verified numbers.
