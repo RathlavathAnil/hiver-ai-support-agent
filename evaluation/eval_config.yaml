@@ -1,0 +1,45 @@
+# Evaluation Configuration
+# All parameters for the evaluation harness in one place
+
+brand: AppleSupport
+
+# Paths
+golden_set_path: ../data/golden/golden_set.csv
+results_dir: ./results
+
+# Agent API
+agent:
+  base_url: http://localhost:8080/api/v1/support
+  timeout_seconds: 30
+  retry_attempts: 3
+
+# Intent classification
+intents:
+  taxonomy_path: ../data/processed/intent_taxonomy.json
+
+# ML Baseline
+ml_baseline:
+  test_size: 0.2
+  random_state: 42
+  tfidf_max_features: 5000
+
+# LLM-as-Judge
+llm_judge:
+  model: gemini-2.0-flash  # Use same family but could swap for different family
+  temperature: 0.1
+  dimensions:
+    - relevance
+    - tone
+    - groundedness
+    - resolution
+  scale_min: 1
+  scale_max: 5
+
+# Human-vs-LLM Agreement
+agreement:
+  sample_size: 50
+  human_labels_path: ../data/golden/human_judge_scores.csv
+
+# Failure Analysis
+failure_analysis:
+  top_k_failures: 5

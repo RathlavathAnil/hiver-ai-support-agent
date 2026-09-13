@@ -1,0 +1,32 @@
+{
+  "Trivial Baseline (Majority)": {
+    "intent_accuracy": 0.105,
+    "intent_macro_f1": 0.019004524886877826,
+    "intent_weighted_f1": 0.01995475113122172,
+    "escalation_accuracy": 0.7,
+    "escalation_macro_f1": 0.4117647058823529,
+    "rouge1_f1": 0.28225498683421885,
+    "rouge2_f1": 0.067594765102547,
+    "rougeL_f1": 0.2281637313750334
+  },
+  "ML Baseline (TF-IDF + LogReg)": {
+    "intent_accuracy": 0.49,
+    "intent_macro_f1": 0.508824426011588,
+    "intent_weighted_f1": 0.5127599778411384,
+    "escalation_accuracy": 0.705,
+    "escalation_macro_f1": 0.6789203014883949,
+    "rouge1_f1": 0.2904967431889466,
+    "rouge2_f1": 0.10776897917513864,
+    "rougeL_f1": 0.2338165012361567
+  },
+  "Spring Boot AI Support Agent": {
+    "intent_accuracy": 0.845,
+    "intent_macro_f1": 0.8373553434698746,
+    "intent_weighted_f1": 0.8313908714815983,
+    "escalation_accuracy": 0.935,
+    "escalation_macro_f1": 0.9267832502604827,
+    "rouge1_f1": 0.27448207914128964,
+    "rouge2_f1": 0.09226883873148427,
+    "rougeL_f1": 0.2207874082285366
+  }
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "brand": "AppleSupport",
+    "outbound_tweets": 106860,
+    "customer_tweets_replied": 106625,
+    "direct_pairs": 106648,
+    "dm_redirection_pct": 52.67,
+    "actionable_troubleshooting_pct": 53.91,
+    "multiturn_pct": 30.02
+  },
+  {
+    "brand": "AmazonHelp",
+    "outbound_tweets": 169840,
+    "customer_tweets_replied": 154985,
+    "direct_pairs": 168823,
+    "dm_redirection_pct": 2.59,
+    "actionable_troubleshooting_pct": 14.58,
+    "multiturn_pct": 50.45
+  },
+  {
+    "brand": "SpotifyCares",
+    "outbound_tweets": 43265,
+    "customer_tweets_replied": 41697,
+    "direct_pairs": 43206,
+    "dm_redirection_pct": 31.76,
+    "actionable_troubleshooting_pct": 27.7,
+    "multiturn_pct": 37.48
+  },
+  {
+    "brand": "Uber_Support",
+    "outbound_tweets": 56270,
+    "customer_tweets_replied": 55215,
+    "direct_pairs": 56193,
+    "dm_redirection_pct": 36.19,
+    "actionable_troubleshooting_pct": 14.68,
+    "multiturn_pct": 28.72
+  },
+  {
+    "brand": "Delta",
+    "outbound_tweets": 42253,
+    "customer_tweets_replied": 36168,
+    "direct_pairs": 42149,
+    "dm_redirection_pct": 16.96,
+    "actionable_troubleshooting_pct": 8.08,
+    "multiturn_pct": 31.97
+  },
+  {
+    "brand": "AskPlayStation",
+    "outbound_tweets": 19098,
+    "customer_tweets_replied": 18650,
+    "direct_pairs": 18675,
+    "dm_redirection_pct": 29.37,
+    "actionable_troubleshooting_pct": 41.25,
+    "multiturn_pct": 38.94
+  },
+  {
+    "brand": "XboxSupport",
+    "outbound_tweets": 24557,
+    "customer_tweets_replied": 21276,
+    "direct_pairs": 24312,
+    "dm_redirection_pct": 21.41,
+    "actionable_troubleshooting_pct": 25.94,
+    "multiturn_pct": 48.95
+  },
+  {
+    "brand": "hulu_support",
+    "outbound_tweets": 21872,
+    "customer_tweets_replied": 21559,
+    "direct_pairs": 21772,
+    "dm_redirection_pct": 1.16,
+    "actionable_troubleshooting_pct": 25.4,
+    "multiturn_pct": 34.64
+  }
+]

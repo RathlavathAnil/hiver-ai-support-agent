@@ -1,0 +1,210 @@
+# Intent Taxonomy for @AppleSupport Customer Support Agent
+# Derived empirically from 106,648 historical conversation pairs
+
+taxonomy_version: "1.0"
+brand: "AppleSupport"
+total_conversations_analyzed: 106648
+num_intents: 10
+
+intents:
+  - id: "BATTERY_PERFORMANCE"
+    name: "Battery Drain, Charging & Power Management"
+    definition: "Customer reports rapid battery drain, charging failures, battery health degradation, unexpected shutdowns, or device overheating while powering."
+    belong_scope:
+      - "Rapid percentage drops (e.g. 40% to 7% in 5 minutes)"
+      - "Device dying with battery remaining"
+      - "Slow charging or refusal to charge via Lightning cable"
+      - "Overheating while charging or in normal usage"
+      - "Battery capacity / health inquiries"
+    not_belong_scope:
+      - "Battery drain explicitly attributed to a fresh iOS update installation (belongs to SOFTWARE_UPDATE_OS)"
+      - "Bulging battery physically popping the screen open (belongs to HARDWARE_PHYSICAL_DAMAGE)"
+      - "Billing charges for battery replacement (belongs to BILLING_SUBSCRIPTIONS)"
+    estimated_volume: 10243
+    percentage_share: 9.60
+    confused_with:
+      - "SOFTWARE_UPDATE_OS (when update is mentioned alongside drain)"
+      - "HARDWARE_PHYSICAL_DAMAGE (when physical bulging occurs)"
+    business_utility: "High volume, high auto-resolution potential via battery diagnostic workflows (Low Power Mode, Background App Refresh, Battery Health check)."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "SOFTWARE_UPDATE_OS"
+    name: "iOS & OS Updates, Installation & Downgrades"
+    definition: "Customer experiences issues updating iOS/macOS, update verification errors, installation bootloops, or requests to downgrade/revert versions."
+    belong_scope:
+      - "Stuck on 'Verifying Update' or 'Preparing Update'"
+      - "iOS 11 update installation errors"
+      - "Requests to downgrade back to iOS 10"
+      - "Post-update system bugs, UI glitches, or boot loop at Apple logo"
+      - "iTunes/Finder update/restore error codes (e.g. Error 4013, 9)"
+    not_belong_scope:
+      - "Third-party app crashing after an update (belongs to APP_CRASH_PERFORMANCE)"
+      - "Wi-Fi disconnection after update (belongs to NETWORK_CONNECTIVITY)"
+      - "General pre-purchase feature inquiries (belongs to GENERAL_PRODUCT_INQUIRY)"
+    estimated_volume: 29695
+    percentage_share: 27.84
+    confused_with:
+      - "APP_CRASH_PERFORMANCE"
+      - "BATTERY_PERFORMANCE"
+    business_utility: "Primary seasonal ticket driver during major OS rollouts (e.g., iOS 11 launch); automatable with verified recovery mode / OTA update steps."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "HARDWARE_PHYSICAL_DAMAGE"
+    name: "Physical Hardware Damage, Cracks & Repair Service"
+    definition: "Inquiries regarding physically damaged screens, cracked rear glass, water/liquid intrusion, broken buttons/ports, or Genius Bar appointment scheduling."
+    belong_scope:
+      - "Shattered or cracked screen glass"
+      - "Device dropped in water / liquid contact indicator triggered"
+      - "Broken home button, power button, or volume rocker"
+      - "AppleCare+ claim inquiries and repair cost estimates"
+      - "Genius Bar hardware diagnostics and mail-in service"
+    not_belong_scope:
+      - "Touchscreen unresponsive due to software freeze (belongs to APP_CRASH_PERFORMANCE)"
+      - "Software glitch causing keyboard character failure (belongs to SOFTWARE_UPDATE_OS)"
+      - "App Store refund disputes (belongs to BILLING_SUBSCRIPTIONS)"
+    estimated_volume: 1489
+    percentage_share: 1.40
+    confused_with:
+      - "APP_CRASH_PERFORMANCE (physical digitizer break vs OS freeze)"
+      - "GENERAL_PRODUCT_INQUIRY (warranty checks)"
+    business_utility: "Critical for human escalation routing, preventing false promises of automated fixes, and routing directly to store repair workflows."
+    default_escalation: "ESCALATE"
+
+  - id: "ACCOUNT_ACCESS_SECURITY"
+    name: "Apple ID, Security, Passwords & 2FA"
+    definition: "Inability to authenticate Apple ID, forgotten passcodes, disabled account alerts, two-factor SMS delivery failures, phishing alerts, or activation lock."
+    belong_scope:
+      - "Apple ID disabled for security reasons"
+      - "Forgotten lock screen passcode or Apple ID password"
+      - "Two-factor authentication code sent to lost/stolen device"
+      - "Activation Lock on newly acquired or reset device"
+      - "Suspected phishing / fake security SMS verification"
+    not_belong_scope:
+      - "Inability to download apps due to credit card decline (belongs to BILLING_SUBSCRIPTIONS)"
+      - "iCloud storage full alerts (belongs to ICLOUD_STORAGE_SYNC)"
+    estimated_volume: 1337
+    percentage_share: 1.25
+    confused_with:
+      - "ICLOUD_STORAGE_SYNC (Apple ID credentials vs iCloud storage)"
+      - "BILLING_SUBSCRIPTIONS (payment info update prompt)"
+    business_utility: "High security liability; prevents security breaches and requires strict routing to iforgot.apple.com or human security tier."
+    default_escalation: "ESCALATE"
+
+  - id: "APP_CRASH_PERFORMANCE"
+    name: "App Crashes, Freezing & System Unresponsiveness"
+    definition: "Native or third-party apps crashing on launch, system UI lag, frozen touch screen, keyboard latency, or device locking up."
+    belong_scope:
+      - "Specific apps crashing (Instagram, Safari, Camera, Mail, Messages)"
+      - "Extreme keyboard typing lag or UI sluggishness"
+      - "Screen frozen and unresponsive to touch"
+      - "Black/blank screen with audio still playing"
+      - "Camera viewfinder black screen"
+    not_belong_scope:
+      - "Phone completely dead and won't turn on (belongs to BATTERY_PERFORMANCE)"
+      - "Physically cracked display digitizer (belongs to HARDWARE_PHYSICAL_DAMAGE)"
+    estimated_volume: 2962
+    percentage_share: 2.78
+    confused_with:
+      - "SOFTWARE_UPDATE_OS (when lag started following an update)"
+      - "HARDWARE_PHYSICAL_DAMAGE (unresponsive touch screen)"
+    business_utility: "Resolvable via standard software hygiene (Force Quit, Force Restart, App Update, Reinstall)."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "NETWORK_CONNECTIVITY"
+    name: "Wi-Fi, Bluetooth, Cellular & Hotspot"
+    definition: "Issues connecting to wireless networks, Bluetooth accessory pairing failures (AirPods, car audio), cellular reception loss ('No Service'), or AirDrop failures."
+    belong_scope:
+      - "Wi-Fi dropping connection or grayed-out Wi-Fi toggle"
+      - "Bluetooth skipping or failing to pair with AirPods/car"
+      - "'No Service' or 'Searching...' cellular carrier errors"
+      - "Personal Hotspot disconnection"
+      - "AirDrop discovery failures"
+    not_belong_scope:
+      - "Apple Music streaming buffering due to subscription issue (belongs to BILLING_SUBSCRIPTIONS)"
+      - "Speaker hardware distortion (belongs to AUDIO_SOUND_ISSUES)"
+    estimated_volume: 2362
+    percentage_share: 2.21
+    confused_with:
+      - "AUDIO_SOUND_ISSUES (Bluetooth audio stutter vs physical speaker failure)"
+      - "SOFTWARE_UPDATE_OS (post-update carrier profile issue)"
+    business_utility: "Highly standardized resolution playbook (Reset Network Settings, Toggle Airplane Mode, Carrier Settings Update)."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "BILLING_SUBSCRIPTIONS"
+    name: "App Store Charges, Subscriptions & Refunds"
+    definition: "Questions regarding unauthorized iTunes/App Store charges, subscription cancellations, refund requests for digital goods, or payment declines."
+    belong_scope:
+      - "Unexpected / unauthorized App Store or iTunes charges"
+      - "Refund requests for accidental in-app purchases or apps"
+      - "Cancelling active recurring Apple Music / iCloud / third-party subscriptions"
+      - "Credit card declined or billing address verification errors"
+    not_belong_scope:
+      - "Physical repair cost quotes (belongs to HARDWARE_PHYSICAL_DAMAGE)"
+      - "Trade-in value estimates (belongs to GENERAL_PRODUCT_INQUIRY)"
+    estimated_volume: 1904
+    percentage_share: 1.79
+    confused_with:
+      - "ACCOUNT_ACCESS_SECURITY (account disabled due to billing issue)"
+      - "GENERAL_PRODUCT_INQUIRY (pricing questions)"
+    business_utility: "High customer friction area requiring clear instructions for reportaproblem.apple.com or human billing escalation."
+    default_escalation: "ESCALATE"
+
+  - id: "AUDIO_SOUND_ISSUES"
+    name: "Microphone, Speaker, Call Audio & Earpiece"
+    definition: "Distorted speaker sound, crackling audio, microphone not capturing voice during calls/Siri, muffled earpiece, or device stuck in headphone mode."
+    belong_scope:
+      - "Callers cannot hear customer's voice (microphone failure)"
+      - "Earpiece receiver muffled or low volume during phone calls"
+      - "Loudspeaker crackling, popping, or completely silent"
+      - "Device stuck in 'Headphones' mode when unplugged"
+      - "Ring/Silent switch not registering"
+    not_belong_scope:
+      - "Bluetooth car disconnection (belongs to NETWORK_CONNECTIVITY)"
+      - "App Store audio playback subscription lock (belongs to BILLING_SUBSCRIPTIONS)"
+    estimated_volume: 1210
+    percentage_share: 1.13
+    confused_with:
+      - "NETWORK_CONNECTIVITY (Bluetooth audio vs built-in speakers)"
+      - "HARDWARE_PHYSICAL_DAMAGE (liquid inside speaker grill)"
+    business_utility: "Enables guided cleaning/diagnostic checks before routing to hardware repair."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "ICLOUD_STORAGE_SYNC"
+    name: "iCloud Storage Full, Backup & Data Sync"
+    definition: "Warnings regarding exhausted iCloud storage capacity, failed iCloud backups, missing photos/notes after synchronization, or backup restore errors."
+    belong_scope:
+      - "'iCloud Storage is Full' system warning notifications"
+      - "iCloud backup failing or incomplete overnight"
+      - "Photos not syncing from iCloud Photo Library to Mac/iPad"
+      - "Contacts or Notes missing after device restore"
+      - "Managing storage tier upgrades / downgrades"
+    not_belong_scope:
+      - "Forgotten iCloud password (belongs to ACCOUNT_ACCESS_SECURITY)"
+      - "Physical on-device flash storage full (belongs to APP_CRASH_PERFORMANCE / GENERAL)"
+    estimated_volume: 558
+    percentage_share: 0.52
+    confused_with:
+      - "ACCOUNT_ACCESS_SECURITY (iCloud login vs iCloud data)"
+      - "BILLING_SUBSCRIPTIONS (50GB/200GB iCloud tier charge)"
+    business_utility: "Automated guidance on storage optimization (Settings > [Name] > iCloud > Manage Storage) saves agent handle time."
+    default_escalation: "AUTO_HANDLE"
+
+  - id: "GENERAL_PRODUCT_INQUIRY"
+    name: "Feature Guidance, Compatibility & Store Info"
+    definition: "General how-to questions, accessory/software compatibility, trade-in valuations, Apple Store hours, or general hardware specifications."
+    belong_scope:
+      - "How to configure a specific native setting (Wallpaper, Do Not Disturb, Siri)"
+      - "Device trade-in eligibility and value assessment"
+      - "Accessory compatibility (e.g. Apple Pencil with iPad models)"
+      - "Apple Retail Store locations, appointment walk-ins, and hours"
+      - "Official warranty coverage check via serial number"
+    not_belong_scope:
+      - "Active technical failure or error (belongs to specific category above)"
+      - "Screen replacement pricing (belongs to HARDWARE_PHYSICAL_DAMAGE)"
+    estimated_volume: 2336
+    percentage_share: 2.19
+    confused_with:
+      - "SOFTWARE_UPDATE_OS (feature discovery vs OS bug)"
+      - "HARDWARE_PHYSICAL_DAMAGE (general repair inquiry vs actual broken phone)"
+    business_utility: "Direct auto-resolution via knowledge base links and official Apple documentation."
+    default_escalation: "AUTO_HANDLE"

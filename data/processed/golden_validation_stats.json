@@ -1,0 +1,38 @@
+{
+  "total_examples": 200,
+  "intent_distribution": {
+    "SOFTWARE_UPDATE_OS": 24,
+    "BATTERY_PERFORMANCE": 22,
+    "HARDWARE_PHYSICAL_DAMAGE": 20,
+    "ACCOUNT_ACCESS_SECURITY": 20,
+    "APP_CRASH_PERFORMANCE": 20,
+    "NETWORK_CONNECTIVITY": 20,
+    "BILLING_SUBSCRIPTIONS": 20,
+    "GENERAL_PRODUCT_INQUIRY": 20,
+    "AUDIO_SOUND_ISSUES": 18,
+    "ICLOUD_STORAGE_SYNC": 16
+  },
+  "intent_percentages": {
+    "SOFTWARE_UPDATE_OS": 12.0,
+    "BATTERY_PERFORMANCE": 11.0,
+    "HARDWARE_PHYSICAL_DAMAGE": 10.0,
+    "ACCOUNT_ACCESS_SECURITY": 10.0,
+    "APP_CRASH_PERFORMANCE": 10.0,
+    "NETWORK_CONNECTIVITY": 10.0,
+    "BILLING_SUBSCRIPTIONS": 10.0,
+    "GENERAL_PRODUCT_INQUIRY": 10.0,
+    "AUDIO_SOUND_ISSUES": 9.0,
+    "ICLOUD_STORAGE_SYNC": 8.0
+  },
+  "auto_handle_count": 140,
+  "escalate_count": 60,
+  "difficulty_distribution": {
+    "EASY": 101,
+    "MEDIUM": 60,
+    "HARD": 39
+  },
+  "ambiguous_count": 140,
+  "multi_intent_count": 33,
+  "missing_values": 0,
+  "duplicates": 0
+}

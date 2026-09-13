@@ -1,0 +1,49 @@
+# Data
+data/raw/*.csv
+data/raw/*.zip
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+*.egg
+dist/
+build/
+.venv/
+venv/
+env/
+*.ipynb_checkpoints/
+
+# Java / Maven
+support-agent/target/
+*.class
+*.jar
+*.war
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment & Secrets
+.env
+.env.*
+*.env
+*.env.local
+*.key
+*.pem
+credentials.json
+secrets.json
+
+# Docker
+pgdata/
+

@@ -1,0 +1,47 @@
+# Hiver AI Support Agent — Python Evaluation Environment
+# Pin versions for reproducibility
+
+# Data processing
+pandas==2.2.3
+numpy==1.26.4
+
+# ML baseline
+scikit-learn==1.5.2
+
+# Text metrics
+rouge-score==0.1.2
+nltk==3.9.1
+
+# Embeddings / similarity
+sentence-transformers==3.3.1
+
+# LLM API client (for LLM-as-judge)
+google-generativeai==0.8.4
+
+# Visualization
+matplotlib==3.9.3
+seaborn==0.13.2
+
+# Evaluation utilities
+scipy==1.14.1
+
+# Database
+psycopg2-binary==2.9.10
+sqlalchemy==2.0.36
+
+# Notebooks (exploration phase)
+jupyter==1.1.1
+ipykernel==6.29.5
+
+# Configuration
+pyyaml==6.0.2
+
+# HTTP client (for calling Spring Boot API)
+requests==2.32.3
+httpx==0.28.1
+
+# Progress bars
+tqdm==4.67.1
+
+# Pretty tables
+tabulate==0.9.0

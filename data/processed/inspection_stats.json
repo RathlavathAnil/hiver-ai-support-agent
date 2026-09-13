@@ -1,0 +1,125 @@
+{
+  "file_size_bytes": 516508641,
+  "file_size_mb": 492.58,
+  "total_rows": 2811774,
+  "total_cols": 7,
+  "columns": [
+    "tweet_id",
+    "author_id",
+    "inbound",
+    "created_at",
+    "text",
+    "response_tweet_id",
+    "in_response_to_tweet_id",
+    "parsed_time",
+    "char_len",
+    "word_len"
+  ],
+  "column_stats": [
+    {
+      "column": "tweet_id",
+      "dtype": "int64",
+      "non_null_count": 2811774,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_values": 2811774,
+      "sample_value": "1"
+    },
+    {
+      "column": "author_id",
+      "dtype": "str",
+      "non_null_count": 2811774,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_values": 702777,
+      "sample_value": "sprintcare"
+    },
+    {
+      "column": "inbound",
+      "dtype": "bool",
+      "non_null_count": 2811774,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_values": 2,
+      "sample_value": "False"
+    },
+    {
+      "column": "created_at",
+      "dtype": "str",
+      "non_null_count": 2811774,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_values": 2061666,
+      "sample_value": "Tue Oct 31 22:10:47 +0000 2017"
+    },
+    {
+      "column": "text",
+      "dtype": "str",
+      "non_null_count": 2811774,
+      "null_count": 0,
+      "null_pct": 0.0,
+      "unique_values": 2782618,
+      "sample_value": "@115712 I understand. I would like to assist you. We would need to get you into a private secured link to further assist."
+    },
+    {
+      "column": "response_tweet_id",
+      "dtype": "str",
+      "non_null_count": 1771145,
+      "null_count": 1040629,
+      "null_pct": 37.01,
+      "unique_values": 1771145,
+      "sample_value": "2"
+    },
+    {
+      "column": "in_response_to_tweet_id",
+      "dtype": "float64",
+      "non_null_count": 2017439,
+      "null_count": 794335,
+      "null_pct": 28.25,
+      "unique_values": 1774822,
+      "sample_value": "3.0"
+    }
+  ],
+  "full_dupes": 0,
+  "tweet_id_dupes": 0,
+  "inbound_counts": {
+    "True": 1537843,
+    "False": 1273931
+  },
+  "total_authors": 702777,
+  "unique_companies": 108,
+  "top_companies": {
+    "AmazonHelp": 169840,
+    "AppleSupport": 106860,
+    "Uber_Support": 56270,
+    "SpotifyCares": 43265,
+    "Delta": 42253,
+    "Tesco": 38573,
+    "AmericanAir": 36764,
+    "TMobileHelp": 34317,
+    "comcastcares": 33031,
+    "British_Airways": 29361,
+    "SouthwestAir": 28977,
+    "VirginTrains": 27817,
+    "Ask_Spectrum": 25860,
+    "XboxSupport": 24557,
+    "sprintcare": 22381
+  },
+  "apple_outbound": 106860,
+  "apple_inbound_mentions": 97896,
+  "min_date": "2008-05-08 20:13:59+00:00",
+  "max_date": "2017-12-03 23:14:01+00:00",
+  "time_span_days": 3496,
+  "has_url_pct": 22.46,
+  "has_handle_pct": 97.88,
+  "char_len_mean": 113.9,
+  "char_len_median": 115.0,
+  "char_len_max": 513,
+  "word_len_mean": 19.5,
+  "word_len_median": 19.0,
+  "word_len_max": 137,
+  "has_reply_to_count": 2017439,
+  "has_response_id_count": 1771145,
+  "multi_response_count": 222426,
+  "conv_starters_count": 787346
+}

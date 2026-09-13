@@ -1,0 +1,749 @@
+{
+  "total_evaluated": 200,
+  "total_intent_errors": 31,
+  "total_escalation_errors": 13,
+  "top_5_failure_modes": [
+    {
+      "id": 1,
+      "category": "Multi-Intent & Compound Queries",
+      "description": "Customer message mentions multiple distinct issues simultaneously (e.g., iOS update causing severe battery drain).",
+      "example": {
+        "tweet_id": 1455307,
+        "customer_message": "IOS 11 is the worst update to date. My phone is useless without WiFi and battery dies in 2 hours.",
+        "expected_intent": "SOFTWARE_UPDATE_OS / BATTERY_PERFORMANCE",
+        "observed_intent": "SOFTWARE_UPDATE_OS",
+        "expected_decision": "AUTO_HANDLE",
+        "observed_decision": "AUTO_HANDLE"
+      },
+      "root_cause": "Single-label classification architecture forces arbitrary truncation of secondary intent.",
+      "proposed_fix": "Implement multi-label intent classification with compound routing and composite troubleshooting guidance."
+    },
+    {
+      "id": 2,
+      "category": "Context-Free Follow-up & Attachment Ambiguity",
+      "description": "Short messages or media attachment links (https://t.co) without clarifying text context.",
+      "example": {
+        "tweet_id": 1516175,
+        "customer_message": "#iOS11 #update #iphoneissueswithIOS11 https://t.co/YhBerEXfFU",
+        "expected_intent": "SOFTWARE_UPDATE_OS",
+        "observed_intent": "GENERAL_PRODUCT_INQUIRY",
+        "expected_decision": "AUTO_HANDLE",
+        "observed_decision": "AUTO_HANDLE"
+      },
+      "root_cause": "Missing visual multimodal analysis and thread antecedent context.",
+      "proposed_fix": "Ingest parent tweet thread context and integrate vision LLM for screenshot OCR/diagnostics."
+    },
+    {
+      "id": 3,
+      "category": "Colloquial Slang, Typos & Non-Standard Lexicon",
+      "description": "Informal expressions, heavy abbreviations, or spelling errors that bypass lexical n-grams.",
+      "example": {
+        "tweet_id": 582732,
+        "customer_message": "What an utter piece of shit is @AppleSupport latest High Sierra update. My computer never felt so slow before",
+        "expected_intent": "SOFTWARE_UPDATE_OS",
+        "observed_intent": "APP_CRASH_PERFORMANCE",
+        "expected_decision": "AUTO_HANDLE",
+        "observed_decision": "AUTO_HANDLE"
+      },
+      "root_cause": "TF-IDF and surface keyword matching struggle with emotion-heavy and slang vocabulary.",
+      "proposed_fix": "Dense semantic embeddings and sentiment-aware prompt grounding."
+    },
+    {
+      "id": 4,
+      "category": "Subtle Financial / Security Escalation Boundaries",
+      "description": "Inquiries describing indirect account lockouts or minor store charges without explicit trigger keywords.",
+      "example": {
+        "tweet_id": 2291591,
+        "customer_message": "wanna explain why I just got the 8 plus but I don't have the new emojis and I can't update to get them?",
+        "expected_intent": "GENERAL_PRODUCT_INQUIRY",
+        "observed_intent": "SOFTWARE_UPDATE_OS",
+        "expected_decision": "AUTO_HANDLE",
+        "observed_decision": "AUTO_HANDLE"
+      },
+      "root_cause": "Overlapping semantic boundaries between OS features and general product inquiries.",
+      "proposed_fix": "Hierarchical intent classification (e.g. Category -> Subcategory -> Escalation policy)."
+    },
+    {
+      "id": 5,
+      "category": "Generic Historical Boilerplate Retrieval",
+      "description": "Retrieving legacy Twitter deflection replies ('Please meet us in DM') rather than actionable settings links.",
+      "example": {
+        "tweet_id": 1455307,
+        "customer_message": "IOS 11 is the worst update to date. My phone is useless without WiFi.",
+        "expected_reply": "Actionable Wi-Fi & update troubleshooting steps with https://support.apple.com link.",
+        "observed_reply": "We'd love to help. To start, please send us a DM with more details...",
+        "expected_decision": "AUTO_HANDLE",
+        "observed_decision": "AUTO_HANDLE"
+      },
+      "root_cause": "Historical Twitter dataset is heavily populated with human agent DM deflections due to 140/280 char limits.",
+      "proposed_fix": "Filter and synthesize RAG knowledge chunks strictly from actionable Apple Support documentation rather than raw tweets."
+    }
+  ],
+  "misclassified_samples": [
+    {
+      "predicted_intent": "NETWORK_CONNECTIVITY",
+      "confidence": 0.89,
+      "predicted_reply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+      "predicted_decision": "AUTO_HANDLE",
+      "predicted_escalation_reason": "Standard automated support inquiry resolvable via troubleshooting documentation.",
+      "similar_conversations": [
+        {
+          "customerText": "iOS11 one of the glitchiest updates I\u2019ve had.Keyboard issues. Apps shutting down. Unresponsive. Screen won\u2019t rotate [USER]",
+          "agentReply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.70965349289898
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7089594618174841
+        },
+        {
+          "customerText": "[USER] [USER] FIX THIS FUCKING UPDATE & MY PHONE BEFORE I\ufe0f SWITCH TO ANDROID. I\ufe0f AIN\u2019T SIGN UP FOR THIS",
+          "agentReply": "[USER] We've released a software update that addresses this concern. Find out more here: https://t.co/xXaXeeSRt9",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7055420804310708
+        }
+      ],
+      "latency_ms": 455.366849899292,
+      "status": "SUCCESS",
+      "id": 1,
+      "conversation_id": 1455307,
+      "customer_message": "IOS 11 is the worst update to date. My phone is useless without WiFi.",
+      "true_intent": "SOFTWARE_UPDATE_OS",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We\u2019d love to help. To start, please send us a DM with more details on the behavior you\u2019re experiencing. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "SOFTWARE_UPDATE_OS",
+      "confidence": 0.91,
+      "predicted_reply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "AUTO_HANDLE",
+      "predicted_escalation_reason": "Standard automated support inquiry resolvable via troubleshooting documentation.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] can you tell me why I can't use my phone? every app freezes and it constantly crashes and wipes all my photos??",
+          "agentReply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+          "intent": "APP_CRASH_PERFORMANCE",
+          "similarityScore": 0.7034322068676098
+        },
+        {
+          "customerText": "[USER] A few days ago I downloaded th latest update. My friend came to me with his phone not working showing only your logo and a black screen. When I returned home my father had the same problem. Now I do too. I believe it's on loop restart? Is it about Arabic long text?",
+          "agentReply": "[USER] Let's get to the bottom of this together. Have you tried to force restart your iPhone? If not, follow the steps for your model here: https://t.co/8MvHMFZ83h Let us know how it goes.",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.695471105384482
+        },
+        {
+          "customerText": "Every since I downloaded that update my phone been tweaking [USER] \ud83e\udd14",
+          "agentReply": "[USER] Thanks for reaching out to us. We are always happy to help. Send us a DM with more detail about what's going on. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6875778511447384
+        }
+      ],
+      "latency_ms": 493.0696487426758,
+      "status": "SUCCESS",
+      "id": 4,
+      "conversation_id": 1704669,
+      "customer_message": "any idea how to fix the messaging crash issues among this new update?",
+      "true_intent": "APP_CRASH_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We want to help! What model of iOS device are you using? Are you getting an error, or does the app crash to the home screen?",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "SOFTWARE_UPDATE_OS",
+      "confidence": 0.91,
+      "predicted_reply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "AUTO_HANDLE",
+      "predicted_escalation_reason": "Standard automated support inquiry resolvable via troubleshooting documentation.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6452590784894334
+        },
+        {
+          "customerText": "iOS11 one of the glitchiest updates I\u2019ve had.Keyboard issues. Apps shutting down. Unresponsive. Screen won\u2019t rotate [USER]",
+          "agentReply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6361474177926155
+        },
+        {
+          "customerText": "[USER] apple. ones you get when you get a new phone.",
+          "agentReply": "[USER] Got it, thanks. So we're sure to be on the same page is there no sound at all or is there an issue with the sound quality? Also, does it happen when connected to any device?",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6070033205158024
+        }
+      ],
+      "latency_ms": 461.30943298339844,
+      "status": "SUCCESS",
+      "id": 5,
+      "conversation_id": 2320380,
+      "customer_message": "do you guys still have the free app of the week for iOS 11.1",
+      "true_intent": "GENERAL_PRODUCT_INQUIRY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "That's a great question! There have been some changes made to the new App Store. For some great app suggestions now, you can check out the Game and App of the Day. More info about that here: https://t.co/oWUHlNlygh",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "HARDWARE_PHYSICAL_DAMAGE",
+      "confidence": 0.95,
+      "predicted_reply": "[USER] We can help get those exercise minutes tracking. Which version of iOS are you currently running? You can check in Settings > General > About > Version.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Physical hardware damage requires in-person store inspection, hardware diagnostic tools, or Genius Bar repair appointment.",
+      "similar_conversations": [
+        {
+          "customerText": "Why isn\u2019t my apple watch not monitoring my exercise minutes?? It did before I got the new iPhone 8 and had to reset it and start over. [USER].",
+          "agentReply": "[USER] We can help get those exercise minutes tracking. Which version of iOS are you currently running? You can check in Settings > General > About > Version.",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6892472791735745
+        },
+        {
+          "customerText": "[USER] It doesn\u2019t work with any device ever fam it\u2019s a software issue",
+          "agentReply": "[USER] We'd like to look into this further. Join us in DM here: https://t.co/GDrqU22YpT",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6052366024538192
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6043447281984898
+        }
+      ],
+      "latency_ms": 505.4018497467041,
+      "status": "SUCCESS",
+      "id": 12,
+      "conversation_id": 2246925,
+      "customer_message": "when my watch dies, why doesn\u2019t my phone update my step count after it recharges? Instead, I\u2019m left with a discrepancy in step count & a broken step streak :-/",
+      "true_intent": "SOFTWARE_UPDATE_OS",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We'd like to help. Let's take this to DM and we'll explore ways to provide you assistance. https://t.co/GDrqU22YpT",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "predicted_intent": "NETWORK_CONNECTIVITY",
+      "confidence": 0.89,
+      "predicted_reply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "AUTO_HANDLE",
+      "predicted_escalation_reason": "Standard automated support inquiry resolvable via troubleshooting documentation.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7024679119942359
+        },
+        {
+          "customerText": "[USER] [USER] why can\u2019t I control when I can connect my Bluetooth accessories? Why until tomorrow? I want it now, whenever I want, for as long as I want to. https://t.co/8qzAbSbaAa",
+          "agentReply": "[USER] This article explains more about the changes to Bluetooth & Wi-Fi in iOS 11: https://t.co/G7BHuQnDS6 You can easily enable and disable both Bluetooth and Wi-Fi from Settings, or quickly disconnect either from the current connections in Control Center.",
+          "intent": "NETWORK_CONNECTIVITY",
+          "similarityScore": 0.694986177686177
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6693334190051599
+        }
+      ],
+      "latency_ms": 451.39098167419434,
+      "status": "SUCCESS",
+      "id": 22,
+      "conversation_id": 693946,
+      "customer_message": "Hey @AppleSupport why does my Bluetooth keep turning itself on after iOS 11.",
+      "true_intent": "SOFTWARE_UPDATE_OS",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We know how important it is to control your Bluetooth connections. Check out https://t.co/G7BHuQnDS6 and let us know if that's what you're describing.",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.700720632162294
+        },
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6816877072974347
+        },
+        {
+          "customerText": "[USER] after upgrading to iOS 11.03 my iPad Air 2 won't charge anymore!! I tried everything but nothing worked! Please fix!!",
+          "agentReply": "[USER] We want you to be able to charge your iPad. Are you seeing an error message when the iPad is connected to power?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6724737245032565
+        }
+      ],
+      "latency_ms": 483.12902450561523,
+      "status": "SUCCESS",
+      "id": 32,
+      "conversation_id": 2270045,
+      "customer_message": "Lost around 3 hours of battery backup on full charge after updating from iOS 10 to iOS 11. (iPhone SE)\nWhen will iOS 11 address the battery issues?\n#iOS11 #iPhoneSE",
+      "true_intent": "BATTERY_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "How long ago was the last update performed? DM with that and your location and we can dig in deeper. https://t.co/GDrqU22YpT",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "We can help guide you on billing. You can view, manage, and request refunds for subscriptions at reportaproblem.apple.com or under Settings > [Your Name] > Subscriptions.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] after upgrading to iOS 11.03 my iPad Air 2 won't charge anymore!! I tried everything but nothing worked! Please fix!!",
+          "agentReply": "[USER] We want you to be able to charge your iPad. Are you seeing an error message when the iPad is connected to power?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.747806467704406
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7380318052352838
+        },
+        {
+          "customerText": "iOS11 one of the glitchiest updates I\u2019ve had.Keyboard issues. Apps shutting down. Unresponsive. Screen won\u2019t rotate [USER]",
+          "agentReply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7066683558623199
+        }
+      ],
+      "latency_ms": 538.3052825927734,
+      "status": "SUCCESS",
+      "id": 46,
+      "conversation_id": 2212992,
+      "customer_message": "Your iOS 11 update made my tablets non mobile.  2 tablets that could hold a charge for hours now don\u2019t last 90 minutes. Fix this!",
+      "true_intent": "BATTERY_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "Thanks for reaching out. We'd like to know more to assist with the battery issues you're experiencing. Send us a DM using the link below and we'll continue. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "[USER] Please continue to stand by. We have another reply coming in our DM. Thank you for your patience as we help to provide you with a solution. https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] I bought an apple laptop- it was a thousand quid. I bought apple software- it was two hundred quid. I updated my laptop, and now the software doesn't work because I am not in the UK. The work is urgent. This is a disgrace.",
+          "agentReply": "[USER] Please continue to stand by. We have another reply coming in our DM. Thank you for your patience as we help to provide you with a solution. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6534891104978694
+        },
+        {
+          "customerText": "[USER] why does my phone suck after the update? There was nothing wrong with it.. stop trying to get people to buy the new iPhone",
+          "agentReply": "[USER] We'd like to help get your iPhone working smoothly again! What seems to be the trouble?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6505218507105228
+        },
+        {
+          "customerText": "[USER] [USER] FIX THIS FUCKING UPDATE & MY PHONE BEFORE I\ufe0f SWITCH TO ANDROID. I\ufe0f AIN\u2019T SIGN UP FOR THIS",
+          "agentReply": "[USER] We've released a software update that addresses this concern. Find out more here: https://t.co/xXaXeeSRt9",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6500743121396254
+        }
+      ],
+      "latency_ms": 471.76289558410645,
+      "status": "SUCCESS",
+      "id": 52,
+      "conversation_id": 2849163,
+      "customer_message": "Very disappointing Genius Bar app today. Faulty speaker on my phone and want to charge \u00a350 ish. Phones is 6 wks ish over warranty. Yet I\u2019ve been trying to book in for 8 weeks but can\u2019t get app to suite my diary till today. #timeforasamsungafter10yearswithyou",
+      "true_intent": "HARDWARE_PHYSICAL_DAMAGE",
+      "true_decision": "ESCALATE",
+      "reference_reply": "Thank you for reaching out to us. We'd like to take a closer look into this with you. DM us when the first time you contacted Apple about this issue. https://t.co/GDrqU22YpT",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] can you tell me why I can't use my phone? every app freezes and it constantly crashes and wipes all my photos??",
+          "agentReply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+          "intent": "APP_CRASH_PERFORMANCE",
+          "similarityScore": 0.7062030293215409
+        },
+        {
+          "customerText": "Why the fuck had my Mac just logged itself out [USER]? And why does my phone keep crashing also? And before you ask, they\u2019re on latest versions of High Sierra and iOS11",
+          "agentReply": "[USER] We'd like to look into these issues in more detail with you. Join us in DM with specifics about what happens when your iPhone crashes and your Mac logs you out. We can gather more information there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.670798675991189
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6623687736456346
+        }
+      ],
+      "latency_ms": 508.17036628723145,
+      "status": "SUCCESS",
+      "id": 89,
+      "conversation_id": 541195,
+      "customer_message": "my iPhone keeps crashing, even at 100% charge, any ideas?",
+      "true_intent": "APP_CRASH_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We're happy to help. An update has been released that addresses this issue. If you haven't already, back up your iPhone and follow the steps here: https://t.co/osZOKKTalm\n\nDM us if you have questions. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "AUDIO_SOUND_ISSUES",
+      "confidence": 0.88,
+      "predicted_reply": "Let's look into your audio issue. Please check Settings > Sounds & Haptics, test with Voice Memos, and ensure the speakers/receivers are clear of any debris.",
+      "predicted_decision": "AUTO_HANDLE",
+      "predicted_escalation_reason": "Standard automated support inquiry resolvable via troubleshooting documentation.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] why does my phone suck after the update? There was nothing wrong with it.. stop trying to get people to buy the new iPhone",
+          "agentReply": "[USER] We'd like to help get your iPhone working smoothly again! What seems to be the trouble?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7307210335537128
+        },
+        {
+          "customerText": "[USER] [USER] FIX THIS FUCKING UPDATE & MY PHONE BEFORE I\ufe0f SWITCH TO ANDROID. I\ufe0f AIN\u2019T SIGN UP FOR THIS",
+          "agentReply": "[USER] We've released a software update that addresses this concern. Find out more here: https://t.co/xXaXeeSRt9",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7139147349545518
+        },
+        {
+          "customerText": "New [USER] iOS update installed overnight and it is terrible. Twitter app crashed twice before I could draft this tweet.",
+          "agentReply": "[USER] We're here to help! Reach out to us in a DM and we will continue there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6991718057767086
+        }
+      ],
+      "latency_ms": 494.09985542297363,
+      "status": "SUCCESS",
+      "id": 92,
+      "conversation_id": 1557818,
+      "customer_message": "somehow with you three updates in the past month you have now managed to kill the great quality the iPhone 8 Plus had in their speakers. Now it sounds trashy and not even half the volume that\u2019s not counting all the crashes and freezes",
+      "true_intent": "APP_CRASH_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We know how important it is for your iPhone to be working properly, and we'd be happy to help. Can you tell us which version of iOS 11 you're currently using? Can you also give us some more details on the sound issue with the speakers?",
+      "difficulty": "MEDIUM"
+    }
+  ],
+  "escalation_mismatches": [
+    {
+      "predicted_intent": "HARDWARE_PHYSICAL_DAMAGE",
+      "confidence": 0.95,
+      "predicted_reply": "[USER] We can help get those exercise minutes tracking. Which version of iOS are you currently running? You can check in Settings > General > About > Version.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Physical hardware damage requires in-person store inspection, hardware diagnostic tools, or Genius Bar repair appointment.",
+      "similar_conversations": [
+        {
+          "customerText": "Why isn\u2019t my apple watch not monitoring my exercise minutes?? It did before I got the new iPhone 8 and had to reset it and start over. [USER].",
+          "agentReply": "[USER] We can help get those exercise minutes tracking. Which version of iOS are you currently running? You can check in Settings > General > About > Version.",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6892472791735745
+        },
+        {
+          "customerText": "[USER] It doesn\u2019t work with any device ever fam it\u2019s a software issue",
+          "agentReply": "[USER] We'd like to look into this further. Join us in DM here: https://t.co/GDrqU22YpT",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6052366024538192
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6043447281984898
+        }
+      ],
+      "latency_ms": 505.4018497467041,
+      "status": "SUCCESS",
+      "id": 12,
+      "conversation_id": 2246925,
+      "customer_message": "when my watch dies, why doesn\u2019t my phone update my step count after it recharges? Instead, I\u2019m left with a discrepancy in step count & a broken step streak :-/",
+      "true_intent": "SOFTWARE_UPDATE_OS",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We'd like to help. Let's take this to DM and we'll explore ways to provide you assistance. https://t.co/GDrqU22YpT",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.700720632162294
+        },
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6816877072974347
+        },
+        {
+          "customerText": "[USER] after upgrading to iOS 11.03 my iPad Air 2 won't charge anymore!! I tried everything but nothing worked! Please fix!!",
+          "agentReply": "[USER] We want you to be able to charge your iPad. Are you seeing an error message when the iPad is connected to power?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6724737245032565
+        }
+      ],
+      "latency_ms": 483.12902450561523,
+      "status": "SUCCESS",
+      "id": 32,
+      "conversation_id": 2270045,
+      "customer_message": "Lost around 3 hours of battery backup on full charge after updating from iOS 10 to iOS 11. (iPhone SE)\nWhen will iOS 11 address the battery issues?\n#iOS11 #iPhoneSE",
+      "true_intent": "BATTERY_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "How long ago was the last update performed? DM with that and your location and we can dig in deeper. https://t.co/GDrqU22YpT",
+      "difficulty": "MEDIUM"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "We can help guide you on billing. You can view, manage, and request refunds for subscriptions at reportaproblem.apple.com or under Settings > [Your Name] > Subscriptions.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] after upgrading to iOS 11.03 my iPad Air 2 won't charge anymore!! I tried everything but nothing worked! Please fix!!",
+          "agentReply": "[USER] We want you to be able to charge your iPad. Are you seeing an error message when the iPad is connected to power?",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.747806467704406
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7380318052352838
+        },
+        {
+          "customerText": "iOS11 one of the glitchiest updates I\u2019ve had.Keyboard issues. Apps shutting down. Unresponsive. Screen won\u2019t rotate [USER]",
+          "agentReply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7066683558623199
+        }
+      ],
+      "latency_ms": 538.3052825927734,
+      "status": "SUCCESS",
+      "id": 46,
+      "conversation_id": 2212992,
+      "customer_message": "Your iOS 11 update made my tablets non mobile.  2 tablets that could hold a charge for hours now don\u2019t last 90 minutes. Fix this!",
+      "true_intent": "BATTERY_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "Thanks for reaching out. We'd like to know more to assist with the battery issues you're experiencing. Send us a DM using the link below and we'll continue. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] can you tell me why I can't use my phone? every app freezes and it constantly crashes and wipes all my photos??",
+          "agentReply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+          "intent": "APP_CRASH_PERFORMANCE",
+          "similarityScore": 0.7062030293215409
+        },
+        {
+          "customerText": "Why the fuck had my Mac just logged itself out [USER]? And why does my phone keep crashing also? And before you ask, they\u2019re on latest versions of High Sierra and iOS11",
+          "agentReply": "[USER] We'd like to look into these issues in more detail with you. Join us in DM with specifics about what happens when your iPhone crashes and your Mac logs you out. We can gather more information there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.670798675991189
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6623687736456346
+        }
+      ],
+      "latency_ms": 508.17036628723145,
+      "status": "SUCCESS",
+      "id": 89,
+      "conversation_id": 541195,
+      "customer_message": "my iPhone keeps crashing, even at 100% charge, any ideas?",
+      "true_intent": "APP_CRASH_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We're happy to help. An update has been released that addresses this issue. If you haven't already, back up your iPhone and follow the steps here: https://t.co/osZOKKTalm\n\nDM us if you have questions. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "ACCOUNT_ACCESS_SECURITY",
+      "confidence": 0.94,
+      "predicted_reply": "[USER] Let's get to the bottom of this together. Have you tried to force restart your iPhone? If not, follow the steps for your model here: https://t.co/8MvHMFZ83h Let us know how it goes.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Account access, security lockouts, and identity verification require secure authentication via iforgot.apple.com or human security advisor.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] A few days ago I downloaded th latest update. My friend came to me with his phone not working showing only your logo and a black screen. When I returned home my father had the same problem. Now I do too. I believe it's on loop restart? Is it about Arabic long text?",
+          "agentReply": "[USER] Let's get to the bottom of this together. Have you tried to force restart your iPhone? If not, follow the steps for your model here: https://t.co/8MvHMFZ83h Let us know how it goes.",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6633234015080518
+        },
+        {
+          "customerText": "[USER] can you tell me why I can't use my phone? every app freezes and it constantly crashes and wipes all my photos??",
+          "agentReply": "[USER] We'd like to team up with you to resolve this. To get started, send us a DM with more information and the iOS version your iPhone is running. We'll meet you there. https://t.co/GDrqU22YpT",
+          "intent": "APP_CRASH_PERFORMANCE",
+          "similarityScore": 0.6632424197648809
+        },
+        {
+          "customerText": "[USER] This requires turning off the phone to be able to access email again after a search of email",
+          "agentReply": "[USER] That's certainly not expected behavior. Please send us a DM, and we'll continue working towards a resolution. https://t.co/GDrqU22YpT",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6418526915600553
+        }
+      ],
+      "latency_ms": 476.01914405822754,
+      "status": "SUCCESS",
+      "id": 93,
+      "conversation_id": 542437,
+      "customer_message": "My SE phone goes to the black screen with spinning wheel and asks for touch id or passcode once in a while when using the phone. How do i fix it?",
+      "true_intent": "APP_CRASH_PERFORMANCE",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We're here to help you today with your iPhone. DM us your country location so we can get started looking into this with you. https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "ACCOUNT_ACCESS_SECURITY",
+      "confidence": 0.94,
+      "predicted_reply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Account access, security lockouts, and identity verification require secure authentication via iforgot.apple.com or human security advisor.",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.7061893798627737
+        },
+        {
+          "customerText": "iOS11 one of the glitchiest updates I\u2019ve had.Keyboard issues. Apps shutting down. Unresponsive. Screen won\u2019t rotate [USER]",
+          "agentReply": "[USER] We\u2019ve got your back on this. Can you let us know more about the changes you\u2019ve noticed via DM? https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6928743396404554
+        },
+        {
+          "customerText": "Why the fuck had my Mac just logged itself out [USER]? And why does my phone keep crashing also? And before you ask, they\u2019re on latest versions of High Sierra and iOS11",
+          "agentReply": "[USER] We'd like to look into these issues in more detail with you. Join us in DM with specifics about what happens when your iPhone crashes and your Mac logs you out. We can gather more information there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6687169455268073
+        }
+      ],
+      "latency_ms": 478.03187370300293,
+      "status": "SUCCESS",
+      "id": 112,
+      "conversation_id": 2543032,
+      "customer_message": "Geez already. Upgraded to iOS 11 and the WiFi keeps kicking me out with incorrect password given. Will you fix that? Seems to be the bug here.",
+      "true_intent": "NETWORK_CONNECTIVITY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We'll be glad to assist you today. Does this happen for other Wi-Fi networks you connect to?",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "GENERAL_PRODUCT_INQUIRY",
+      "confidence": 0.5,
+      "predicted_reply": "We're here to help! Could you share a few more details about the issue you're experiencing, along with your device model and OS version?",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Intent classification confidence (0.50) is below automated handling threshold (0.60)",
+      "similar_conversations": [],
+      "latency_ms": 200.9718418121338,
+      "status": "SUCCESS",
+      "id": 181,
+      "conversation_id": 2282241,
+      "customer_message": "my Apple Pay is stuck in UK , how do I change country for Apple Pay?",
+      "true_intent": "GENERAL_PRODUCT_INQUIRY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "We're here to help. Check out the article below and DM us if you have any questions. https://t.co/cLHlp91SvS https://t.co/GDrqU22YpT",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "GENERAL_PRODUCT_INQUIRY",
+      "confidence": 0.5,
+      "predicted_reply": "We're here to help! Could you share a few more details about the issue you're experiencing, along with your device model and OS version?",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Intent classification confidence (0.50) is below automated handling threshold (0.60)",
+      "similar_conversations": [],
+      "latency_ms": 225.2030372619629,
+      "status": "SUCCESS",
+      "id": 182,
+      "conversation_id": 2285872,
+      "customer_message": "how do i fix this @AppleSupport https://t.co/6PDVg0pJYo",
+      "true_intent": "GENERAL_PRODUCT_INQUIRY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "You've come to the right place. To clarify, are you part of Family Sharing? If so, are you the family organizer or is someone else in your family? Send over the answers via DM. https://t.co/GDrqU22YpT",
+      "difficulty": "HARD"
+    },
+    {
+      "predicted_intent": "BILLING_SUBSCRIPTIONS",
+      "confidence": 0.92,
+      "predicted_reply": "We can help guide you on billing. You can view, manage, and request refunds for subscriptions at reportaproblem.apple.com or under Settings > [Your Name] > Subscriptions.",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Financial billing inquiries, unauthorized credit card charges, and subscription refunds require private transaction records and account-specific review.",
+      "similar_conversations": [],
+      "latency_ms": 170.8531379699707,
+      "status": "SUCCESS",
+      "id": 184,
+      "conversation_id": 2366204,
+      "customer_message": "My iTunes account shows that I have an existing credit, however purchases are still being charged to my card. How do I get it to use the credit?",
+      "true_intent": "GENERAL_PRODUCT_INQUIRY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "Let's get you to the right place to get your issue looked into. Be sure to reach out to our iTunes Store team from this link here: https://t.co/SDIe7UiyJN",
+      "difficulty": "EASY"
+    },
+    {
+      "predicted_intent": "GENERAL_PRODUCT_INQUIRY",
+      "confidence": 0.5,
+      "predicted_reply": "[USER] That's certainly not expected behavior. Please send us a DM, and we'll continue working towards a resolution. https://t.co/GDrqU22YpT",
+      "predicted_decision": "ESCALATE",
+      "predicted_escalation_reason": "Intent classification confidence (0.50) is below automated handling threshold (0.60)",
+      "similar_conversations": [
+        {
+          "customerText": "[USER] This requires turning off the phone to be able to access email again after a search of email",
+          "agentReply": "[USER] That's certainly not expected behavior. Please send us a DM, and we'll continue working towards a resolution. https://t.co/GDrqU22YpT",
+          "intent": "GENERAL_PRODUCT_INQUIRY",
+          "similarityScore": 0.6357607162549058
+        },
+        {
+          "customerText": "[USER] After the iOS 11 update. It seems to be just Twitter",
+          "agentReply": "[USER] Alright, so that we can take a deeper look, feel free to DM us and we'll go from there. https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.6199908626074389
+        },
+        {
+          "customerText": "Also, since I updated to the new iOS my battery life has been so incredibly bad, wtf [USER] \ud83d\ude44",
+          "agentReply": "[USER] Battery life is essential; we'll do all we can to help. To start, DM us to let us know the exact iOS 11 version installed: https://t.co/GDrqU22YpT",
+          "intent": "SOFTWARE_UPDATE_OS",
+          "similarityScore": 0.59929456672974
+        }
+      ],
+      "latency_ms": 462.88013458251953,
+      "status": "SUCCESS",
+      "id": 187,
+      "conversation_id": 193564,
+      "customer_message": "how do I turn access mail fetch setting in the new iOS? No longer an option under the mail settings.",
+      "true_intent": "GENERAL_PRODUCT_INQUIRY",
+      "true_decision": "AUTO_HANDLE",
+      "reference_reply": "This is now in Settings > Accounts & Passwords > Fetch New Data. Learn more about setting up mail acounts: https://t.co/Sv6TMt6dws",
+      "difficulty": "EASY"
+    }
+  ]
+}
