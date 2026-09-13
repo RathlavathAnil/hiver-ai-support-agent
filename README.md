@@ -296,6 +296,8 @@ python evaluation/calculate_judge_agreement.py
 | **Safety** | 19 | 1 | 52.6% | 84.2% | 0.68 | 0.000 | 0.000 | 0.000 | 0.000 |
 | **Overall Score** | 19 | 1 | 36.8% | 52.6% | 1.29 | -0.234 | -0.203 | -0.004 | -0.105 |
 
+The human ratings used in this analysis were author-provided validation ratings rather than independently double-annotated ratings. Therefore, these agreement statistics are exploratory evidence about judge behavior, not a formal independent human-LLM validation study.
+
 > [!WARNING]
 > **Interpretation & Scientific Integrity**: Human-LLM agreement on this 19-sample validation set is **weak** ($\kappa \le 0.000$, negative correlation). The LLM judge frequently penalizes replies that invite users to DM or ask for iOS versions, whereas human raters recognize this as standard Twitter support procedure. **The LLM judge is therefore presented strictly as an experimental secondary diagnostic, not as a validated ground truth.**
 

@@ -25,7 +25,7 @@ This project delivers an end-to-end AI support agent that:
 
 Analysis of the 2.81M tweet Customer Support on Twitter (TWCS) dataset identified `@AppleSupport` as the optimal brand for self-contained support automation:
 - **106,648 direct customer-brand conversation pairs** across 76,366 unique customers.
-- **53.91% actionable troubleshooting resolution rate** (compared to AmazonHelp at 14.58%, Uber_Support at 14.68%, and Delta at 8.08%, where >85% of replies are private order/ticket lookup deflections).
+- Selected based on conversation volume, direct customer-brand interactions, multi-turn support patterns, and the presence of actionable troubleshooting resolutions.
 - **10 Empirically Derived Intents**:
   1. `SOFTWARE_UPDATE_OS`: iOS/macOS update installations, verification loops, post-update glitches.
   2. `BATTERY_PERFORMANCE`: Rapid battery drain, charging issues, battery health degradation.
@@ -57,7 +57,7 @@ Evaluated against the **200-sample Stratified Golden Evaluation Set** (Seed: 42)
 ### Benchmark Insights:
 1. **Majority Baseline Failure**: Guessing the majority class yields only 10.5% accuracy and 0.0190 Macro F1 on the balanced golden set.
 2. **ML Baseline Limits**: TF-IDF + Logistic Regression reaches 49.0% intent accuracy and 0.5088 Macro F1 on this multi-class domain.
-3. **Production Agent Performance**: The production agent achieves **84.5% Intent Accuracy**, **0.8374 Intent Macro F1**, and **0.9268 Escalation Macro F1**.
+3. **AI Support Agent Performance**: The evaluated AI support agent achieves **84.5% Intent Accuracy**, **0.8374 Intent Macro F1**, and **0.9268 Escalation Macro F1**.
 
 ---
 
@@ -66,7 +66,7 @@ Evaluated against the **200-sample Stratified Golden Evaluation Set** (Seed: 42)
 1. **Stratified Test Set vs Real-World Class Imbalance**: In real Twitter traffic, `SOFTWARE_UPDATE_OS` and `BATTERY_PERFORMANCE` represent >60% of volume. Macro F1 weights rare classes (`ICLOUD_STORAGE_SYNC` at 2%) equally with dominant classes.
 2. **Small Evaluation Sample**: The 84.5% accuracy is measured on a 200-example manually reviewed golden set. It does not establish proven generalization across high-volume enterprise production.
 3. **Retrieval Corpus Subsampling**: The retrieval database currently uses a 50-conversation Gemini-embedded subsample due to API rate constraints.
-4. **Lexical ROUGE vs Support Quality**: The ML baseline achieved a slightly higher ROUGE-L (0.2338) than the production agent (0.2208) because it copies legacy Twitter boilerplate (*"Please DM us with your model"*), which matches historical tweets lexically but provides inferior customer value compared to direct troubleshooting guidance.
+4. **Lexical ROUGE vs Support Quality**: The ML baseline achieved a slightly higher ROUGE-L (0.2338) than the evaluated agent (0.2208) because it copies legacy Twitter boilerplate (*"Please DM us with your model"*), which matches historical tweets lexically but provides inferior customer value compared to direct troubleshooting guidance.
 5. **LLM Judge Disagreement**: The human-vs-LLM agreement analysis revealed weak correlation ($\kappa \le 0.000$), demonstrating that LLM judge scores cannot be treated as ground truth.
 
 ---
@@ -89,6 +89,8 @@ Evaluated against the **200-sample Stratified Golden Evaluation Set** (Seed: 42)
 | **Helpfulness** | 19 | 1 | 31.6% | 52.6% | 1.37 | -0.227 | -0.188 | -0.111 | 0.038 |
 | **Safety** | 19 | 1 | 52.6% | 84.2% | 0.68 | 0.000 | 0.000 | 0.000 | 0.000 |
 | **Overall Score** | 19 | 1 | 36.8% | 52.6% | 1.29 | -0.234 | -0.203 | -0.004 | -0.105 |
+
+The human ratings used in this analysis were author-provided validation ratings rather than independently double-annotated ratings. Therefore, these agreement statistics are exploratory evidence about judge behavior, not a formal independent human-LLM validation study.
 
 > [!NOTE]
 > **Scientific Integrity**: Human-LLM agreement on this 19-sample validation set is weak ($\kappa \le 0.000$). The LLM judge frequently penalizes standard Twitter support procedures (e.g. asking for the iOS version in DM). The LLM judge is therefore treated strictly as a secondary diagnostic, not as ground truth.
